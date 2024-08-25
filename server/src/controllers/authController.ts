@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/userModel';
+import { sendOtpEmail } from '../services/emailService';
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -28,6 +29,7 @@ export const signup = async (req: Request, res: Response) => {
 
     await newUser.save();
 
+    await sendOtpEmail(email, otp);
 
     res.status(200).json({ message: 'Signup successful. Please verify your email.' });
   } catch (error) {

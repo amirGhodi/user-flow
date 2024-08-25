@@ -1,5 +1,6 @@
 import express from 'express';
 import { authRoutes } from './routes/authRoutes';
+import { userRoutes } from './routes/userRoutes';
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -13,3 +14,4 @@ app.get('/hello', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
