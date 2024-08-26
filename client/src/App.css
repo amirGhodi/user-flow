@@ -147,16 +147,6 @@
 }
 
 
-.password-toggle-icon {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #3A244A;
-}
-
-
 .error-message {
   color: #D72638;
   font-size: 13px;
@@ -486,7 +476,13 @@
   transform: translateY(-50%);
   cursor: pointer;
   color: #3A244A;
+  z-index: 1;
 }
+
+.form-input:focus + .password-toggle-icon {
+  display: none;
+}
+
 
 
 .error-input {
@@ -602,13 +598,6 @@
 .password-input-container {
   display: flex;
   align-items: center;
-}
-
-
-.password-toggle-icon {
-  position: absolute;
-  right: 10px;
-  cursor: pointer;
 }
 
 

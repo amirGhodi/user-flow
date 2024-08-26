@@ -10,9 +10,11 @@ const ResetPasswordForm: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,12 +27,21 @@ const ResetPasswordForm: React.FC = () => {
       await resetPassword(currentPassword, newPassword);
       setSuccess(true);
     } catch (error: unknown) {
+      console.log("errtt", error);
       if (error instanceof Error) {
         setError(error.message);
       } else {
         setError('An unknown error occurred.');
       }
     }
+  };
+
+
+  const togglePasswordVisibility = (field: 'current' | 'new' | 'confirm') => {
+    setShowPassword((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
   };
 
 
@@ -52,7 +63,7 @@ const ResetPasswordForm: React.FC = () => {
           <div className="form-group password-group">
             <div className="password-input-container">
               <input
-                type={showCurrentPassword ? 'text' : 'password'}
+                type={showPassword.current ? 'text' : 'password'}
                 id="currentPassword"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
@@ -62,16 +73,16 @@ const ResetPasswordForm: React.FC = () => {
               />
               <span
                 className="password-toggle-icon"
-                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                onClick={() => togglePasswordVisibility('current')}
               >
-                {showCurrentPassword ? <FaEye /> : <FaEyeSlash />}
+                {showPassword.current ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
           </div>
           <div className="form-group password-group">
             <div className="password-input-container">
               <input
-                type={showNewPassword ? 'text' : 'password'}
+                type={showPassword.new ? 'text' : 'password'}
                 id="newPassword"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -81,16 +92,16 @@ const ResetPasswordForm: React.FC = () => {
               />
               <span
                 className="password-toggle-icon"
-                onClick={() => setShowNewPassword(!showNewPassword)}
+                onClick={() => togglePasswordVisibility('new')}
               >
-                {showNewPassword ? <FaEye /> : <FaEyeSlash />}
+                {showPassword.new ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
           </div>
           <div className="form-group password-group">
             <div className="password-input-container">
               <input
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showPassword.confirm ? 'text' : 'password'}
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -100,9 +111,9 @@ const ResetPasswordForm: React.FC = () => {
               />
               <span
                 className="password-toggle-icon"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                onClick={() => togglePasswordVisibility('confirm')}
               >
-                {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                {showPassword.confirm ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
           </div>

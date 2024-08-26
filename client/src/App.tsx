@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import PasswordResetForm from './components/PasswordResetForm';
 import WelcomePage from './components/WelcomePage';
@@ -10,6 +10,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/reset-password" element={<PasswordResetForm />} />
         <Route path="/welcome" element={<WelcomePage />} />
@@ -21,3 +22,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

@@ -1,36 +1,37 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../services/authService';
-import loginImage from '../assets/signin.png'; 
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login } from "../services/authService";
+import loginImage from "../assets/signin.png";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); 
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [backendError, setBackendError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/welcome');
+      navigate("/welcome");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        setError(error.message);
+        setBackendError(error.message);
       } else {
-        setError('An unknown error occurred.');
+        setBackendError("An unknown error occurred.");
       }
     }
   };
 
   const handleSignUpClick = () => {
-    navigate('/signup');
+    navigate("/signup");
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); 
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -40,7 +41,9 @@ const LoginForm: React.FC = () => {
       </div>
       <div className="login-content-container">
         <div className="login-card">
-          <h2 className="login-title">Fill what we know <span>!</span></h2>
+          <h2 className="login-title">
+            Fill what we know <span>!</span>
+          </h2>
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
               <input
@@ -55,7 +58,7 @@ const LoginForm: React.FC = () => {
             </div>
             <div className="form-group password-group">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 id="password"
                 className="form-input"
                 value={password}
@@ -63,14 +66,26 @@ const LoginForm: React.FC = () => {
                 required
                 placeholder="Password"
               />
-              <span onClick={togglePasswordVisibility} className="password-toggle-icon">
+              <span
+                onClick={togglePasswordVisibility}
+                className="password-toggle-icon"
+              >
                 {showPassword ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
             {error && <p className="error-message">{error}</p>}
+            {backendError && <p className="error-message">{backendError}</p>}
             <div className="form-actions">
-              <button type="submit" className="login-button">Login</button>
-              <button type="button" onClick={handleSignUpClick} className="signup-button">Sign Up</button>
+              <button type="submit" className="login-button">
+                Login
+              </button>
+              <button
+                type="button"
+                onClick={handleSignUpClick}
+                className="signup-button"
+              >
+                Sign Up
+              </button>
             </div>
           </form>
         </div>

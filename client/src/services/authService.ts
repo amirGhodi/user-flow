@@ -1,6 +1,7 @@
 import api from './api';
 import { AxiosError } from 'axios';
 
+
 export const signup = async (
   firstName: string,
   lastName: string,
@@ -12,7 +13,8 @@ export const signup = async (
     return response.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError && error.response) {
-      throw error.response.data;
+      const errorMessage = error.response.data.message || 'An error occurred.';
+      throw new Error(errorMessage);
     } else {
       throw new Error('An unknown error occurred.');
     }
@@ -28,12 +30,14 @@ export const login = async (email: string, password: string) => {
     return token;
   } catch (error: unknown) {
     if (error instanceof AxiosError && error.response) {
-      throw error.response.data;
+      const errorMessage = error.response.data.message || 'An error occurred.';
+      throw new Error(errorMessage);
     } else {
       throw new Error('An unknown error occurred.');
     }
   }
 };
+
 
 export const resetPassword = async (currentPassword: string, newPassword: string) => {
   try {
@@ -50,12 +54,14 @@ export const resetPassword = async (currentPassword: string, newPassword: string
     return response.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError && error.response) {
-      throw error.response.data;
+      const errorMessage = error.response.data.message || 'An error occurred.';
+      throw new Error(errorMessage);
     } else {
       throw new Error('An unknown error occurred.');
     }
   }
 };
+
 
 export const getUserProfile = async () => {
   try {
@@ -68,12 +74,14 @@ export const getUserProfile = async () => {
     return response.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError && error.response) {
-      throw error.response.data;
+      const errorMessage = error.response.data.message || 'An error occurred.';
+      throw new Error(errorMessage);
     } else {
       throw new Error('An unknown error occurred.');
     }
   }
 };
+
 
 export const verifyOtp = async (email: string, otp: string) => {
   try {
@@ -83,9 +91,11 @@ export const verifyOtp = async (email: string, otp: string) => {
     return token;
   } catch (error: unknown) {
     if (error instanceof AxiosError && error.response) {
-      throw error.response.data;
+      const errorMessage = error.response.data.message || 'An error occurred.';
+      throw new Error(errorMessage);
     } else {
       throw new Error('An unknown error occurred.');
     }
   }
 };
+

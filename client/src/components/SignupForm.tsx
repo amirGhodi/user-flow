@@ -4,6 +4,7 @@ import { signup } from '../services/authService';
 import signupImage from '../assets/singup.png';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
+
 const SignupForm: React.FC = () => {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
@@ -11,34 +12,41 @@ const SignupForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showRetypePassword, setShowRetypePassword] = useState(true);
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    retypePassword: true,
+  });
   const [contactMode, setContactMode] = useState('Email');
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [retypePasswordError, setRetypePasswordError] = useState('');
+  const [backendError, setBackendError] = useState('');
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+
+  const togglePasswordVisibility = (field: 'password' | 'retypePassword') => {
+    setShowPassword((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
   };
 
-  const toggleRetypePasswordVisibility = () => {
-    setShowRetypePassword(!showRetypePassword);
-  };
 
   const isValidName = (name: string) => {
     return /^[A-Za-z]+$/.test(name);
   };
 
+
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
+
   const isValidPassword = (password: string) => {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
   };
+
 
   const validateFirstName = () => {
     if (!isValidName(firstName)) {
@@ -48,6 +56,7 @@ const SignupForm: React.FC = () => {
     }
   };
 
+
   const validateLastName = () => {
     if (!isValidName(lastName)) {
       setLastNameError('Last name should contain only characters');
@@ -55,6 +64,7 @@ const SignupForm: React.FC = () => {
       setLastNameError('');
     }
   };
+
 
   const validateEmail = () => {
     if (!isValidEmail(email)) {
@@ -64,6 +74,7 @@ const SignupForm: React.FC = () => {
     }
   };
 
+
   const validatePassword = () => {
     if (!isValidPassword(password)) {
       setPasswordError('Password should contain at least 8 char with 1 uppercase, 1 lowercase, 1 number, and 1 special character');
@@ -71,6 +82,7 @@ const SignupForm: React.FC = () => {
       setPasswordError('');
     }
   };
+
 
   const validateRetypePassword = () => {
     if (password !== retypePassword) {
@@ -80,8 +92,10 @@ const SignupForm: React.FC = () => {
     }
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
 
     validateFirstName();
     validateLastName();
@@ -89,21 +103,24 @@ const SignupForm: React.FC = () => {
     validatePassword();
     validateRetypePassword();
 
+
     if (firstNameError || lastNameError || emailError || passwordError || retypePasswordError) {
       return;
     }
+
 
     try {
       await signup(firstName, lastName, email, password);
       navigate('/otp-verification', { state: { email } });
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error(error.message);
+        setBackendError(error.message);
       } else {
-        console.error('An unknown error occurred.');
+        setBackendError('An unknown error occurred.');
       }
     }
   };
+
 
   return (
     <div className="signup-container">
@@ -145,7 +162,7 @@ const SignupForm: React.FC = () => {
           <div className="form-group password-group">
             <div className="password-input-container">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword.password ? 'text' : 'password'}
                 id="password"
                 placeholder="Set Password"
                 value={password}
@@ -154,8 +171,11 @@ const SignupForm: React.FC = () => {
                 className={passwordError ? 'error-input' : ''}
                 required
               />
-              <span onClick={togglePasswordVisibility} className="password-toggle-icon">
-                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              <span
+                onClick={() => togglePasswordVisibility('password')}
+                className="password-toggle-icon"
+              >
+                {showPassword.password ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
             {passwordError && <p className="error-message">{passwordError}</p>}
@@ -163,7 +183,7 @@ const SignupForm: React.FC = () => {
           <div className="form-group password-group">
             <div className="password-input-container">
               <input
-                type={showRetypePassword ? 'text' : 'password'}
+                type={showPassword.retypePassword ? 'text' : 'password'}
                 id="retypePassword"
                 placeholder="Retype Password"
                 value={retypePassword}
@@ -172,8 +192,11 @@ const SignupForm: React.FC = () => {
                 className={retypePasswordError ? 'error-input' : ''}
                 required
               />
-              <span onClick={toggleRetypePasswordVisibility} className="password-toggle-icon">
-                {showRetypePassword ? <FaEye /> : <FaEyeSlash />}
+              <span
+                onClick={() => togglePasswordVisibility('retypePassword')}
+                className="password-toggle-icon"
+              >
+                {showPassword.retypePassword ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
             {retypePasswordError && <p className="error-message">{retypePasswordError}</p>}
@@ -202,6 +225,7 @@ const SignupForm: React.FC = () => {
             />
             {emailError && <p className="error-message">{emailError}</p>}
           </div>
+          {backendError && <p className="error-message">{backendError}</p>}
           <div className="form-actions">
             <button type="submit" className="signup-button">Sign Up</button>
           </div>
@@ -210,5 +234,6 @@ const SignupForm: React.FC = () => {
     </div>
   );
 };
+
 
 export default SignupForm;
