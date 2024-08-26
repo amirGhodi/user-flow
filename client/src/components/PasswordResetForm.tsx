@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { resetPassword } from '../services/authService';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 
 const ResetPasswordForm: React.FC = () => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -8,6 +10,10 @@ const ResetPasswordForm: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +33,7 @@ const ResetPasswordForm: React.FC = () => {
     }
   };
 
+
   if (success) {
     return (
       <div className="success-message">
@@ -36,50 +43,76 @@ const ResetPasswordForm: React.FC = () => {
     );
   }
 
+
   return (
     <div className="login-container">
       <div className="login-card">
-      <h2>Reset Password</h2>
-      <form onSubmit={handleSubmit} className="form">
-        <div className="form-group">
-          <label htmlFor="currentPassword">Current Password</label>
-          <input
-            type="password"
-            id="currentPassword"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            required
-            className="form-input"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="newPassword">New Password</label>
-          <input
-            type="password"
-            id="newPassword"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-            className="form-input"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            className="form-input"
-          />
-        </div>
-        {error && <p className="error-message">{error}</p>}
-        <button type="submit" className="form-button">Reset Password</button>
-      </form>
+        <h2>Reset Password</h2>
+        <form onSubmit={handleSubmit} className="form">
+          <div className="form-group password-group">
+            <div className="password-input-container">
+              <input
+                type={showCurrentPassword ? 'text' : 'password'}
+                id="currentPassword"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                required
+                className="form-input"
+                placeholder="Enter your current password"
+              />
+              <span
+                className="password-toggle-icon"
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+              >
+                {showCurrentPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>
+          </div>
+          <div className="form-group password-group">
+            <div className="password-input-container">
+              <input
+                type={showNewPassword ? 'text' : 'password'}
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                className="form-input"
+                placeholder="Enter new password"
+              />
+              <span
+                className="password-toggle-icon"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+              >
+                {showNewPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>
+          </div>
+          <div className="form-group password-group">
+            <div className="password-input-container">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="form-input"
+                placeholder="Confirm new password"
+              />
+              <span
+                className="password-toggle-icon"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>
+          </div>
+          {error && <p className="error-message">{error}</p>}
+          <button type="submit" className="form-button">Reset Password</button>
+        </form>
       </div>
     </div>
   );
 };
+
 
 export default ResetPasswordForm;
