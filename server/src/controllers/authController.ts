@@ -7,17 +7,19 @@ import { sendOtpEmail } from '../services/emailService';
 export const signup = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-
+    console.log('in sign in flow');
+    
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
-
+    
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiration = Date.now() + 3600000;
-
+    
+    console.log('in sign in flow 111');
     const newUser = new User({
       firstName,
       lastName,
@@ -26,9 +28,11 @@ export const signup = async (req: Request, res: Response) => {
       otp,
       otpExpiration,
     });
-
+    
+    console.log('in sign in flow 111 save data');
     await newUser.save();
-
+    
+    console.log('in sign in flow 111 send otp');
     await sendOtpEmail(email, otp);
 
     res.status(200).json({ message: 'Signup successful. Please verify your email.' });
