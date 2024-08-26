@@ -1,8 +1,8 @@
 import express from 'express';
+const dotenv = require('dotenv');
 import { authRoutes } from './routes/authRoutes';
 import { userRoutes } from './routes/userRoutes';
 import cors from 'cors';
-const dotenv = require('dotenv');
 dotenv.config();
 
 export const app = express();
