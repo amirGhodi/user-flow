@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { signup } from '../services/authService';
 import signupImage from '../assets/singup.png';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import '../css/SignUpForm.css';
 
 const SignupForm: React.FC = () => {
   const navigate = useNavigate();

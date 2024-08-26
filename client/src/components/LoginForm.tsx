@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
 import loginImage from '../assets/signin.png'; 
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
-import '../css/LoginForm.css'; 
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
