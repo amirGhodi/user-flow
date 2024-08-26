@@ -6,13 +6,13 @@ export const sendOtpEmail = async (email: string, otp: string) => {
     port: 587,
     secure: false,
     auth: {
-      user: 'otptest064@gmail.com',
-      pass: 'lfbg zpcb pvbg ztao',
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PWD,
     },
   });
 
   const mailOptions = {
-    from: 'otptest064@gmail.com',
+    from: process.env.SMTP_USER,
     to: email,
     subject: 'OTP Verification',
     text: `Your OTP is: ${otp}`,
